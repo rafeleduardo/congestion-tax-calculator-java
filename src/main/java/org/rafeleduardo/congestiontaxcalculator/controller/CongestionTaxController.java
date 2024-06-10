@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/api/v1/taxes")
 public class CongestionTaxController {
@@ -18,9 +20,9 @@ public class CongestionTaxController {
     }
 
     @PostMapping("/calculate")
-    public ResponseEntity<?> calculateTax(@RequestBody CongestionTaxRequest request) {
+    public ResponseEntity<?> calculateTax(@RequestParam("city") String city, @RequestBody CongestionTaxRequest request) throws IOException {
         Vehicle vehicle = createVehicle(request.vehicleType());
-        int tax = congestionTaxService.calculateTax(vehicle, request.dates());
+        int tax = congestionTaxService.calculateTax(vehicle, request.dates(), city);
         return ResponseEntity.ok(new TaxCalculationResponse(tax));
     }
 

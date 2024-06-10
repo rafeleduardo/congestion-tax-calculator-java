@@ -6,6 +6,7 @@ import org.rafeleduardo.congestiontaxcalculator.model.Car;
 import org.rafeleduardo.congestiontaxcalculator.model.Vehicle;
 import org.rafeleduardo.congestiontaxcalculator.service.CongestionTaxCalculator;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,8 +19,8 @@ public class CongestionTaxCalculatorTests {
 	}
 
 	@Test
-	public void testGetTax() {
-		CongestionTaxCalculator calculator = new CongestionTaxCalculator();
+	public void testGetTax() throws IOException {
+		CongestionTaxCalculator calculator = new CongestionTaxCalculator("Gothenburg");
 		Vehicle vehicle = new Car();  // Assuming Car implements Vehicle
 
 		List<LocalDateTime> dates = List.of (
