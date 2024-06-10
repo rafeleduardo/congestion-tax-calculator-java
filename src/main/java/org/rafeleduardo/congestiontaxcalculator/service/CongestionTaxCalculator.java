@@ -25,6 +25,9 @@ public class CongestionTaxCalculator {
     }
     
     public int getTax(Vehicle vehicle, List<LocalDateTime> dates) {
+        if (isTollFreeVehicle(vehicle) || dates == null || dates.isEmpty())
+            return 0;
+
         SortedMap<LocalDate, List<LocalDateTime>> datesGroupedByDay = dates.stream()
                 .collect(Collectors.groupingBy(LocalDateTime::toLocalDate, TreeMap::new, Collectors.collectingAndThen(
                         Collectors.toList(),
