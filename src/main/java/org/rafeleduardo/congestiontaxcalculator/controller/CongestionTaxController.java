@@ -1,5 +1,7 @@
 package org.rafeleduardo.congestiontaxcalculator.controller;
 
+import org.rafeleduardo.congestiontaxcalculator.dto.ErrorResponse;
+import org.rafeleduardo.congestiontaxcalculator.dto.TaxCalculationResponse;
 import org.rafeleduardo.congestiontaxcalculator.model.*;
 import org.rafeleduardo.congestiontaxcalculator.service.CongestionTaxService;
 import org.springframework.http.HttpStatus;
@@ -16,10 +18,10 @@ public class CongestionTaxController {
     }
 
     @PostMapping("/calculate")
-    public ResponseEntity<Integer> calculateTax(@RequestBody CongestionTaxRequest request) {
+    public ResponseEntity<?> calculateTax(@RequestBody CongestionTaxRequest request) {
         Vehicle vehicle = createVehicle(request.vehicleType());
         int tax = congestionTaxService.calculateTax(vehicle, request.dates());
-        return ResponseEntity.ok(tax);
+        return ResponseEntity.ok(new TaxCalculationResponse(tax));
     }
 
     private Vehicle createVehicle(String vehicleType) {
@@ -36,7 +38,7 @@ public class CongestionTaxController {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleException(IllegalArgumentException ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+    public ResponseEntity<ErrorResponse> handleException(IllegalArgumentException ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(ex.getMessage()));
     }
 }
